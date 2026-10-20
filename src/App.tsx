@@ -1,122 +1,82 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import React from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { Avatar } from "./Avatar";
 
 function App() {
-  const [count, setCount] = useState(0)
+  // Создаем стандартный React-стейт для хранения имени текущей анимации
+  const [currentAnim, setCurrentAnim] = React.useState<string>("typing");
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
+    <main style={{ width: "100vw", height: "100vh", background: "#101010", position: "relative" }}>
+      {/* HTML ИНТЕРФЕЙС: Панель управления кнопками поверх 3D сцены (Таймкод: ~11:00) */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "40px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 10,
+          display: "flex",
+          gap: "12px",
+          background: "rgba(255, 255, 255, 0.05)",
+          padding: "12px 24px",
+          borderRadius: "16px",
+          backdropFilter: "blur(8px)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+        }}>
         <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
+          onClick={() => setCurrentAnim("typing")}
+          style={{
+            padding: "8px 16px",
+            cursor: "pointer",
+            borderRadius: "8px",
+            background: currentAnim === "typing" ? "#fff" : "#222",
+            color: currentAnim === "typing" ? "#000" : "#fff",
+            border: "none",
+            fontWeight: "bold",
+          }}>
+          Typing
         </button>
-      </section>
+        <button
+          onClick={() => setCurrentAnim("standing")}
+          style={{
+            padding: "8px 16px",
+            cursor: "pointer",
+            borderRadius: "8px",
+            background: currentAnim === "standing" ? "#fff" : "#222",
+            color: currentAnim === "standing" ? "#000" : "#fff",
+            border: "none",
+            fontWeight: "bold",
+          }}>
+          Standing
+        </button>
+        <button
+          onClick={() => setCurrentAnim("falling")}
+          style={{
+            padding: "8px 16px",
+            cursor: "pointer",
+            borderRadius: "8px",
+            background: currentAnim === "falling" ? "#fff" : "#222",
+            color: currentAnim === "falling" ? "#000" : "#fff",
+            border: "none",
+            fontWeight: "bold",
+          }}>
+          Falling
+        </button>
+      </div>
 
-      <div className="ticks"></div>
+      <Canvas dpr={[1, 2]} camera={{ position: [0, 1, 3.5], fov: 45 }} shadows>
+        <ambientLight intensity={1.5} />
+        <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* Передаем наш стейт в пропс компонента Аватара */}
+        <Avatar position={[0, -1, 0]} animation={currentAnim} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        <OrbitControls enableZoom={true} />
+      </Canvas>
+    </main>
+  );
 }
 
-export default App
+export default App;
