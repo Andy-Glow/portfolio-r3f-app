@@ -1,59 +1,61 @@
 import React from "react";
 import * as THREE from "three";
-import { useGLTF, useTexture } from "@react-three/drei";
-import type { GLTF } from "three-stdlib";
-
-type GLTFResult = GLTF & {
-  nodes: {
-    [key: string]: any;
-  };
-  materials: {
-    [key: string]: THREE.MeshStandardMaterial;
-  };
-};
+import { useGLTF, useTexture, useScroll } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 
 export function Office(props: React.ComponentProps<"group">) {
-  // 1. Загружаем геометрию сцены-комнаты
-  const { nodes } = useGLTF("/models/scene.gltf") as unknown as GLTFResult;
-
-  // 2. Загружаем запеченную карту света и теней, которую ты скачал
+  const { scene } = useGLTF("/models/scene.glb");
   const bakedTexture = useTexture("/textures/baked.jpg");
+  const scroll = useScroll();
 
-  // Корректируем UV-развертку под стандарты отображения Three.js
   bakedTexture.flipY = false;
   bakedTexture.colorSpace = THREE.SRGBColorSpace;
 
-  // 3. Создаем MeshBasicMaterial, чтобы сцена не тратила ресурсы на расчет динамического света
   const bakedMaterial = React.useMemo(
-    () =>
-      new THREE.MeshBasicMaterial({
-        map: bakedTexture,
-      }),
+    () => new THREE.MeshBasicMaterial({ map: bakedTexture }),
     [bakedTexture],
   );
 
+  React.useLayoutEffect(() => {
+    scene.traverse((obj) => {
+      if ((obj as THREE.Mesh).isMesh) {
+        (obj as THREE.Mesh).material = bakedMaterial;
+      }
+    });
+  }, [scene, bakedMaterial]);
+
+  const groupRef = React.useRef<THREE.Group>(null);
+
+  useFrame(() => {
+    if (!scroll || !groupRef.current) return;
+    const firstScreenProgress = Math.min(scroll.offset / 0.25, 1);
+
+    // Ваши настройки офиса
+    const targetY = THREE.MathUtils.lerp(-1.0, -5.0, firstScreenProgress);
+    const targetX = THREE.MathUtils.lerp(0.2, 0.2, firstScreenProgress);
+
+    groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, targetY, 0.1);
+    groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, targetX, 0.1);
+
+    const targetScale = THREE.MathUtils.lerp(0.75, 0, firstScreenProgress);
+    groupRef.current.scale.setScalar(
+      THREE.MathUtils.lerp(groupRef.current.scale.x, targetScale, 0.1),
+    );
+
+    const targetRotationY = THREE.MathUtils.lerp(0, Math.PI / 6, firstScreenProgress);
+    groupRef.current.rotation.y = THREE.MathUtils.lerp(
+      groupRef.current.rotation.y,
+      targetRotationY,
+      0.1,
+    );
+  });
+
   return (
-    <group {...props} dispose={null}>
-      {/* Пробегаем по всем объектам сцены и применяем к ним готовую карту теней */}
-      {Object.keys(nodes).map((key) => {
-        const node = nodes[key];
-        if (node.isMesh) {
-          return (
-            <mesh
-              key={key}
-              geometry={node.geometry}
-              material={bakedMaterial}
-              position={node.position}
-              rotation={node.rotation}
-              scale={node.scale}
-            />
-          );
-        }
-        return null;
-      })}
+    <group ref={groupRef} {...props} dispose={null}>
+      <primitive object={scene} />
     </group>
   );
 }
 
-useGLTF.preload("/models/scene.gltf");
+useGLTF.preload("/models/scene.glb");
 useTexture.preload("/textures/baked.jpg");
