@@ -1,0 +1,140 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.contactsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+  max-width: 350px;
+  perspective: 1000px;
+}
+
+.magneticWrapper {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  outline: none;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 16px;
+  @include glass-effect;
+  background: rgba(15, 15, 20, 0.6);
+  cursor: pointer;
+  will-change: transform;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+  overflow: hidden;
+
+  /* Включаем Container Queries, чтобы шрифт зависел от ширины карточки */
+  container-type: inline-size;
+}
+
+.card:hover {
+  border-color: $glass-border-hover;
+  background: rgba(25, 25, 30, 0.8);
+}
+
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.15);
+  color: $color-primary;
+  flex-shrink: 0;
+}
+
+.telegram {
+  background: rgba(36, 161, 222, 0.15);
+  color: #24a1de;
+}
+.email {
+  background: rgba(234, 67, 53, 0.15);
+  color: #ea4335;
+}
+
+.textWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0; /* Позволяет контейнеру сжиматься */
+}
+
+.label {
+  color: $color-text-muted;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.value {
+  color: $color-text;
+  font-weight: 600;
+
+  /* ЗАПРЕЩАЕМ ПЕРЕНОС СТРОК */
+  white-space: nowrap;
+
+  /* 
+    МАГИЯ АДАПТИВНОГО ШРИФТА:
+    clamp(минимум, идеальный_размер, максимум)
+    5.5cqw означает 5.5% от ширины самой карточки.
+    На узких экранах шрифт уменьшится, на широких — вырастет до 1.1rem.
+  */
+  font-size: clamp(0.75rem, 5.5cqw, 1.1rem);
+
+  /* Если email окажется совсем гигантским, он плавно обрежется троеточием */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.copiedState {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #10b981;
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* --- АДАПТИВ ДЛЯ МОБИЛЬНЫХ --- */
+@media (max-width: 768px) {
+  .contactsWrapper {
+    gap: 12px;
+    max-width: 100%;
+  }
+
+  .card {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .iconWrapper {
+    width: 40px;
+    height: 40px;
+  }
+}

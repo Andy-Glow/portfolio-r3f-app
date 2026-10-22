@@ -4,7 +4,7 @@ import { useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame, useGraph } from "@react-three/fiber";
 import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils.js";
 import { useAvatarAnimation } from "../hooks/useAvatarAnimation";
-import { AVATAR_POSITIONS, AVATAR_ROTATIONS } from "../components/constants/avatar";
+import { AVATAR_POSITIONS, AVATAR_POSITIONS_MOBILE, AVATAR_ROTATIONS } from "./constants/avatar";
 
 export interface AvatarProps extends React.ComponentProps<"group"> {}
 
@@ -42,13 +42,15 @@ export function Avatar({ ...props }: AvatarProps) {
     [typingClips, standingClips, jumpingClips, wavingClips, saluteClips, thumbsClips],
   );
 
-  const { actions, mixer } = useAnimations(allAnimations, groupRef);
+  // Строгая типизация
+  const { actions, mixer } = useAnimations(allAnimations, groupRef) as {
+    actions: Record<string, THREE.AnimationAction>;
+    mixer: THREE.AnimationMixer;
+  };
 
-  // Используем наш вынесенный хук
   const currentAnim = useAvatarAnimation(actions, mixer);
 
   useFrame((state) => {
-    // 1. Смещение для стула
     if (offsetGroupRef.current) {
       const isTyping = currentAnim === "typing";
       const targetX = isTyping ? 0.2 : 0;
@@ -72,9 +74,11 @@ export function Avatar({ ...props }: AvatarProps) {
       );
     }
 
-    // 2. Позиция
     if (groupRef.current) {
-      const pos = AVATAR_POSITIONS[currentAnim] || AVATAR_POSITIONS.standing;
+      const isMobile = state.viewport.aspect < 1 || state.size.width < 768;
+      const positions = isMobile ? AVATAR_POSITIONS_MOBILE : AVATAR_POSITIONS;
+      const pos = positions[currentAnim] || positions.standing;
+
       groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, pos.y, 0.15);
       groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, pos.x, 0.1);
 
@@ -86,22 +90,26 @@ export function Avatar({ ...props }: AvatarProps) {
       );
     }
 
-    // 3. Слежение головой
     if (nodes.Neck && nodes.Head) {
-      const strength = currentAnim === "typing" ? 1.0 : 0.2;
-      const targetX = state.pointer.x * 3.0 * strength;
-      const targetY = -state.pointer.y * 2.4 * strength;
+      const isTyping = currentAnim === "typing";
+      const strength = isTyping ? 1.0 : 0.5;
 
-      nodes.Neck.rotation.y = THREE.MathUtils.lerp(nodes.Neck.rotation.y, targetX * 0.3, 0.1);
-      nodes.Neck.rotation.x = THREE.MathUtils.lerp(nodes.Neck.rotation.x, targetY * 0.3, 0.1);
+      // Если персонаж сидит спиной (typing), инвертируем ось X
+      const invertX = isTyping ? -1 : 1;
+
+      const targetX = state.pointer.x * 4.0 * strength * invertX;
+      const targetY = -state.pointer.y * 3.0 * strength;
+
+      nodes.Neck.rotation.y = THREE.MathUtils.lerp(nodes.Neck.rotation.y, targetX * 0.4, 0.1);
+      nodes.Neck.rotation.x = THREE.MathUtils.lerp(nodes.Neck.rotation.x, targetY * 0.4, 0.1);
 
       if (nodes.Neck1) {
-        nodes.Neck1.rotation.y = THREE.MathUtils.lerp(nodes.Neck1.rotation.y, targetX * 0.3, 0.1);
-        nodes.Neck1.rotation.x = THREE.MathUtils.lerp(nodes.Neck1.rotation.x, targetY * 0.3, 0.1);
+        nodes.Neck1.rotation.y = THREE.MathUtils.lerp(nodes.Neck1.rotation.y, targetX * 0.4, 0.1);
+        nodes.Neck1.rotation.x = THREE.MathUtils.lerp(nodes.Neck1.rotation.x, targetY * 0.4, 0.1);
       }
 
-      nodes.Head.rotation.y = THREE.MathUtils.lerp(nodes.Head.rotation.y, targetX * 0.7, 0.1);
-      nodes.Head.rotation.x = THREE.MathUtils.lerp(nodes.Head.rotation.x, targetY * 0.7, 0.1);
+      nodes.Head.rotation.y = THREE.MathUtils.lerp(nodes.Head.rotation.y, targetX * 0.8, 0.1);
+      nodes.Head.rotation.x = THREE.MathUtils.lerp(nodes.Head.rotation.x, targetY * 0.8, 0.1);
     }
   });
 

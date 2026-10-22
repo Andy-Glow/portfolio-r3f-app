@@ -1,26 +1,21 @@
 import React from "react";
-import { motion as framerMotion } from "framer-motion";
-import "../styles/interface.scss";
+import { motion } from "motion/react";
+import styles from "./Interface.module.scss";
 
 import { Info } from "./sections/Info";
 import { Skills } from "./sections/Skills";
 import { Projects } from "./sections/Projects";
 import { Contacts } from "./sections/Contacts";
 
-const motion = framerMotion as any;
-
-interface SectionProps {
-  children: React.ReactNode;
-}
-
-function Section({ children }: SectionProps) {
+function Section({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className='section-container'>
+    <div className={styles.sectionContainer}>
       <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        className='text-block'>
+        initial={{ opacity: 0, y: 40, filter: "blur(12px)" }}
+        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: false, amount: 0.2 }}
+        className={`${styles.textBlock} ${className || ""}`}>
         {children}
       </motion.div>
     </div>
@@ -29,17 +24,17 @@ function Section({ children }: SectionProps) {
 
 export function Interface() {
   return (
-    <div className='interface-wrapper'>
-      <Section>
+    <div className={styles.wrapper}>
+      <Section className={styles.mobileBottom}>
         <Info />
       </Section>
-      <Section>
+      <Section className={styles.mobileTop}>
         <Skills />
       </Section>
-      <Section>
+      <Section className={styles.mobileTop}>
         <Projects />
       </Section>
-      <Section>
+      <Section className={styles.mobileTop}>
         <Contacts />
       </Section>
     </div>

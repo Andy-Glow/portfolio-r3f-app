@@ -10,19 +10,27 @@ import {
   TRANSITION_DELAY,
 } from "../components/constants/avatar";
 
-export function useAvatarAnimation(actions: any, mixer: any) {
+export function useAvatarAnimation(
+  actions: Record<string, THREE.AnimationAction>,
+  mixer: THREE.AnimationMixer,
+) {
   const scroll = useScroll();
   const [currentAnim, setCurrentAnim] = React.useState<string>("typing");
   const currentAnimRef = React.useRef("typing");
   const transitionTimeout = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isFirstRender = React.useRef(true);
 
-  // Логика скролла
   useFrame(() => {
     if (!scroll) return;
 
+    if (isFirstRender.current) {
+      if (scroll.offset > 0) isFirstRender.current = false;
+      return;
+    }
+
     const exactPage = scroll.offset * (scroll.pages - 1);
     const currentPage = Math.round(exactPage);
-    const isMoving = Math.abs(exactPage - currentPage) > 0.001;
+    const isMoving = Math.abs(exactPage - currentPage) > 0.01;
 
     if (isMoving) {
       if (transitionTimeout.current) {
@@ -46,22 +54,24 @@ export function useAvatarAnimation(actions: any, mixer: any) {
     }
   });
 
-  // Очистка таймера
   React.useEffect(() => {
     return () => {
       if (transitionTimeout.current) clearTimeout(transitionTimeout.current);
     };
   }, []);
 
-  // Слушаем завершение одноразовых анимаций
   React.useEffect(() => {
     if (!mixer) return;
 
     const onFinished = (e: any) => {
+      const finishedActionName = Object.keys(actions).find((key) => actions[key] === e.action);
+
       if (
-        e.action === actions["waving"] ||
-        e.action === actions["salute"] ||
-        e.action === actions["thumbs"]
+        finishedActionName &&
+        finishedActionName === currentAnimRef.current &&
+        (finishedActionName === "waving" ||
+          finishedActionName === "salute" ||
+          finishedActionName === "thumbs")
       ) {
         currentAnimRef.current = "standing";
         setCurrentAnim("standing");
@@ -72,7 +82,6 @@ export function useAvatarAnimation(actions: any, mixer: any) {
     return () => mixer.removeEventListener("finished", onFinished);
   }, [mixer, actions]);
 
-  // Переключение и настройка клипов
   React.useEffect(() => {
     let nextAction = actions[currentAnim];
     let actualAnim = currentAnim;
@@ -82,6 +91,13 @@ export function useAvatarAnimation(actions: any, mixer: any) {
       nextAction = actions["standing"];
     }
     if (!nextAction) return;
+
+    // --- ОТПРАВЛЯЕМ СОБЫТИЯ ДЛЯ ЭФФЕКТА СКОРОСТИ ---
+    if (actualAnim === "jumping") {
+      window.dispatchEvent(new Event("avatar-jump-start"));
+    } else {
+      window.dispatchEvent(new Event("avatar-jump-end"));
+    }
 
     if (actualAnim === "waving" || actualAnim === "salute" || actualAnim === "thumbs") {
       nextAction.setLoop(THREE.LoopOnce, 1);

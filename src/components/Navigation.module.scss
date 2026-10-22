@@ -1,0 +1,56 @@
+@use "../styles/variables" as *;
+@use "../styles/mixins" as *;
+
+.nav {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 16px;
+  @include glass-effect;
+  background: rgba(15, 15, 20, 0.75);
+  z-index: 100;
+}
+
+.navItem {
+  background: transparent;
+  border: none;
+  color: $color-text-muted;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    color: $color-text;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* --- СТИЛИ ДЛЯ НЕАКТИВНОЙ КНОПКИ --- */
+  &:disabled {
+    color: $color-primary; /* Выделяем цветом бренда, показывая, где мы */
+    background: rgba(59, 130, 246, 0.15); /* Легкая подсветка фона */
+    cursor: default; /* Убираем курсор-руку */
+    opacity: 1; /* Оставляем полностью видимой */
+  }
+}
+
+/* --- АДАПТИВ ДЛЯ МОБИЛЬНЫХ --- */
+@media (max-width: 768px) {
+  .nav {
+    top: 16px;
+    right: 50%;
+    transform: translateX(50%);
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .navItem {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}

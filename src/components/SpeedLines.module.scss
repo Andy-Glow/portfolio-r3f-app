@@ -1,0 +1,67 @@
+.speedOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease-out;
+
+  &.active {
+    opacity: 1;
+    transition: opacity 0.1s ease-in;
+    background: rgba(0, 0, 0, 0.4);
+  }
+}
+
+.linesLayer {
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+
+  background: repeating-conic-gradient(
+    from 0deg,
+    transparent 0deg 2deg,
+    rgba(255, 255, 255, 0.7) 2deg 3deg,
+    transparent 3deg 8deg,
+    rgba(255, 255, 255, 0.3) 8deg 10deg
+  );
+
+  filter: blur(2px);
+  mask-image: radial-gradient(circle at center, transparent 15%, black 35%);
+  -webkit-mask-image: radial-gradient(circle at center, transparent 15%, black 35%);
+
+  .active & {
+    animation: speed-spin 0.4s linear infinite;
+  }
+}
+
+@keyframes speed-spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .linesLayer {
+    filter: none;
+    background: repeating-conic-gradient(
+      from 0deg,
+      transparent 0deg 3deg,
+      rgba(255, 255, 255, 0.5) 3deg 4deg,
+      transparent 4deg 10deg,
+      rgba(255, 255, 255, 0.2) 10deg 12deg
+    );
+  }
+}
