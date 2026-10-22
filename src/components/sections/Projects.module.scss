@@ -205,3 +205,132 @@
     border-radius: 16px;
   }
 }
+
+.modalLinks {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.linkBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background: rgba(59, 130, 246, 0.15); /* Легкий синий фон */
+  color: $color-primary;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(59, 130, 246, 0.25);
+    border-color: $color-primary;
+    transform: translateY(-2px);
+  }
+}
+
+.warningText {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: $color-text-muted;
+}
+
+/* --- СТИЛИ ДЛЯ КАРУСЕЛИ --- */
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+/* Кнопки-стрелочки */
+.carouselBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 26px;
+  line-height: 1;
+  z-index: 10; /* Чтобы стрелки были поверх картинки */
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: white;
+    transform: translateY(-50%) scale(1.1); /* Легкий эффект при наведении */
+  }
+
+  &.prev {
+    left: 16px;
+  }
+
+  &.next {
+    right: 16px;
+  }
+}
+
+/* Точки-индикаторы снизу */
+.carouselDots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transition: background 0.3s ease;
+}
+
+.activeDot {
+  background: white;
+}
+
+/* --- АДАПТИВ ДЛЯ МОБИЛЬНЫХ --- */
+@media (max-width: 768px) {
+  .carouselBtn {
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    &.prev {
+      left: 8px;
+    }
+    &.next {
+      right: 8px;
+    }
+  }
+
+  .carouselDots {
+    bottom: 8px;
+  }
+}

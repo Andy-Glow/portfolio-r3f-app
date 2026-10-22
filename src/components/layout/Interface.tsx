@@ -2,10 +2,10 @@ import React from "react";
 import { motion } from "motion/react";
 import styles from "./Interface.module.scss";
 
-import { Info } from "./sections/Info";
-import { Skills } from "./sections/Skills";
-import { Projects } from "./sections/Projects";
-import { Contacts } from "./sections/Contacts";
+import { Info } from "../sections/Info";
+import { Skills } from "../sections/Skills";
+import { Projects } from "../sections/Projects";
+import { Contacts } from "../sections/Contacts";
 
 function Section({ children, className }: { children: React.ReactNode; className?: string }) {
   return (

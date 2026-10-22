@@ -105,6 +105,7 @@ export function Contacts() {
   return (
     <>
       <h2 className='section-title'>КОНТАКТЫ</h2>
+      <p>Вы можете написать мне в телеграм или на электронную почту</p>
       <div className={styles.contactsWrapper}>
         <MagneticCard href='https://t.me/your_username' target='_blank'>
           <div className={`${styles.iconWrapper} ${styles.telegram}`}>

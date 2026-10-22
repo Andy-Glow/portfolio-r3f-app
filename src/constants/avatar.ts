@@ -27,7 +27,7 @@ export const AVATAR_ROTATIONS: Record<string, number> = {
   typing: 2.95,
   standing: 0,
   jumping: 0,
-  waving: -0.2,
+  waving: 0,
   salute: 0,
   thumbs: 0,
 };

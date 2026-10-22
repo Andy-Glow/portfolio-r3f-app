@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import styles from "./Skills.module.scss";
 
@@ -66,12 +66,12 @@ export function Skills() {
       <h2 className='section-title'>МОИ НАВЫКИ</h2>
       <div className={styles.grid}>
         <SkillCard label='React' value={90} />
-        <SkillCard label='TypeScript' value={85} />
-        <SkillCard label='Three.js / WebGL / R3F' value={75} />
+        <SkillCard label='TypeScript' value={80} />
+        <SkillCard label='Three.js / WebGL / R3F' value={80} />
         <SkillCard label='HTML / SCSS' value={95} />
-        <SkillCard label='3ds max / Corona Renderer' value={80} />
-        <SkillCard label='Blender' value={70} />
-        <SkillCard label='Unreal Engine 5' value={60} />
+        <SkillCard label='3ds max / Corona Renderer' value={90} />
+        <SkillCard label='Blender' value={60} />
+        <SkillCard label='Unreal Engine 5' value={55} />
       </div>
     </>
   );

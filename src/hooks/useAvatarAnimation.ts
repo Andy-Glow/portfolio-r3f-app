@@ -8,7 +8,7 @@ import {
   PAGE_ANIMATIONS,
   SALUTE_TIME_SCALE,
   TRANSITION_DELAY,
-} from "../components/constants/avatar";
+} from "../constants/avatar";
 
 export function useAvatarAnimation(
   actions: Record<string, THREE.AnimationAction>,

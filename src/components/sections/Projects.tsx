@@ -2,76 +2,41 @@ import { useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import styles from "./Projects.module.scss";
+import { PROJECTS_DATA, type Project } from "../../constants/projects";
 
-interface Project {
-  id: string;
-  title: string;
-  tags: string[];
-  description: string;
-  imageUrl: string;
-  videoUrl: string;
+// --- КОМПОНЕНТ КАРУСЕЛИ ---
+function ImageCarousel({ images }: { images: string[] }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  return (
+    <div className={styles.carousel}>
+      <img src={images[currentIndex]} alt={`Фото ${currentIndex + 1}`} />
+
+      <button className={`${styles.carouselBtn} ${styles.prev}`} onClick={handlePrev}>
+        &#8249;
+      </button>
+      <button className={`${styles.carouselBtn} ${styles.next}`} onClick={handleNext}>
+        &#8250;
+      </button>
+
+      <div className={styles.carouselDots}>
+        {images.map((_, i) => (
+          <span key={i} className={`${styles.dot} ${i === currentIndex ? styles.activeDot : ""}`} />
+        ))}
+      </div>
+    </div>
+  );
 }
-
-const PROJECTS_DATA: Project[] = [
-  {
-    id: "p1",
-    title: "Интерактивная 3D-витрина",
-    tags: ["React", "Three.js", "R3F"],
-    description:
-      "Разработка интерактивной витрины для бренда одежды. Пользователь может вращать 3D-модель, менять её цвет и текстуры.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
-    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-  },
-  {
-    id: "p2",
-    title: "Веб-конфигуратор авто",
-    tags: ["TypeScript", "Next.js", "Blender"],
-    description:
-      "Сложный конфигуратор автомобилей с возможностью выбора комплектации. 3D-модель оптимизирована для мобильных устройств.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1555626906-fcf10d6851b4?q=80&w=800&auto=format&fit=crop",
-    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-  },
-  {
-    id: "p3",
-    title: "Портфолио дизайнера",
-    tags: ["Vue.js", "GSAP", "SCSS"],
-    description:
-      "Сайт-визитка для цифрового художника с плавными переходами между страницами и кастомным курсором.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop",
-    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-  },
-  {
-    id: "p4",
-    title: "Игра 'Космический шутер'",
-    tags: ["Phaser.js", "Canvas", "Web Audio"],
-    description: "Браузерная 2D-игра с процедурной генерацией уровней и динамическим саундтреком.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=800&auto=format&fit=crop",
-    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-  },
-  {
-    id: "p5",
-    title: "Дашборд аналитики",
-    tags: ["React", "D3.js", "Redux"],
-    description:
-      "Панель управления с интерактивными графиками и возможностью выгрузки отчетов в PDF.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop",
-    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-  },
-  {
-    id: "p6",
-    title: "Лендинг IT-конференции",
-    tags: ["HTML/CSS", "GSAP", "Webflow"],
-    description: "Одностраничный сайт с анимациями появления спикеров и интерактивным расписанием.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800&auto=format&fit=crop",
-    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-  },
-];
 
 function ProjectCard({ project, onClick }: { project: Project; onClick: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -163,15 +128,47 @@ export function Projects() {
                     </span>
                   ))}
                 </div>
+
                 <div className={styles.modalMedia}>
-                  <img src={selectedProject.imageUrl} alt={selectedProject.title} />
+                  {selectedProject.images ? (
+                    <ImageCarousel images={selectedProject.images} />
+                  ) : (
+                    <img src={selectedProject.imageUrl} alt={selectedProject.title} />
+                  )}
                 </div>
-                <p className={styles.modalDescription}>
-                  {selectedProject.description}
-                  <br />
-                  <br />
-                  <em>(Здесь позже появится ссылка на GitHub и живое демо проекта)</em>
-                </p>
+
+                <p className={styles.modalDescription}>{selectedProject.description}</p>
+
+                {selectedProject.hasInteractiveDemo && (
+                  <div className={styles.modalWarning}>
+                    <p className={styles.warningText}>
+                      ⚠️ Обратите внимание: живые демо-версии используют тяжелую 3D-графику (WebGL).
+                      Открытие нескольких таких вкладок одновременно может нагрузить ваше
+                      устройство.
+                    </p>
+                  </div>
+                )}
+
+                <div className={styles.modalLinks}>
+                  {selectedProject.githubUrl && (
+                    <a
+                      href={selectedProject.githubUrl}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className={styles.linkBtn}>
+                      GitHub
+                    </a>
+                  )}
+                  {selectedProject.liveUrl && (
+                    <a
+                      href={selectedProject.liveUrl}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className={styles.linkBtn}>
+                      Живое демо
+                    </a>
+                  )}
+                </div>
               </motion.div>
             </motion.div>
           )}

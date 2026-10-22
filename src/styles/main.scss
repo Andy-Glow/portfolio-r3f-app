@@ -1,6 +1,5 @@
 @use "./variables" as *;
 
-/* Сброс стилей */
 html,
 body,
 #root {
@@ -8,8 +7,8 @@ body,
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Убираем полосы прокрутки браузера */
-  background-color: $color-bg-dark;
+  overflow: hidden;
+  background-color: #000; /* Темный фон на случай, если картинка не загрузилась */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -19,6 +18,8 @@ body,
   position: relative;
   overflow: hidden;
 }
+
+/* ... остальной сброс стилей ... */
 
 ::-webkit-scrollbar {
   display: none;
