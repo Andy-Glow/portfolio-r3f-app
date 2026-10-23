@@ -1,14 +1,17 @@
 export interface Project {
-  id: string;
-  title: string;
-  tags: string[];
-  description: string;
-  imageUrl: string;
-  images?: string[]; // Для карусели в модалке
-  videoUrl: string;
-  githubUrl?: string;
-  liveUrl?: string;
-  hasInteractiveDemo?: boolean;
+  id: string; // Уникальный ID (используется для ключа key в React)
+  title: string; // Название проекта
+  tags: string[]; // Массив технологий (React, TS, Three.js и т.д.)
+  description: string; // Текст для модального окна
+
+  imageUrl: string; // Обложка, которая видна в карточке проекта
+  images?: string[]; // Опционально: массив фото для карусели в модалке
+  videoUrl: string; // Видео-превью, которое запускается при наведении
+
+  githubUrl?: string; // Опционально: ссылка на исходный код
+  liveUrl?: string; // Опционально: ссылка на живое демо
+
+  hasInteractiveDemo?: boolean; // Опционально: флаг, показывать ли предупреждение о тяжелой 3D-графике
 }
 
 export const PROJECTS_DATA: Project[] = [

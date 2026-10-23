@@ -3,12 +3,14 @@ import styles from "./Info.module.scss";
 
 export function Info() {
   return (
+    // motion.div отвечает за анимацию появления карточки
     <motion.div
       className={styles.infoCard}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}>
+      initial={{ opacity: 0, y: 20 }} // Начальное состояние: прозрачный, сдвинут вниз на 20px
+      whileInView={{ opacity: 1, y: 0 }} // Конечное: непрозрачный, на своем месте
+      viewport={{ once: true }} // once: true — анимация сработает только один раз при первом появлении
+      transition={{ duration: 0.6 }} // Длительность анимации
+    >
       <h1 className='main-title'>Безуглов Андрей</h1>
       <div>
         <p className='subtitle'>Разработчик React / TS / Three.js / Node.js</p>

@@ -8,27 +8,36 @@ interface SkillCardProps {
 }
 
 function SkillCard({ label, value }: SkillCardProps) {
+  // 1. Стейт для отслеживания наведения мыши
   const [isHovered, setIsHovered] = useState(false);
-  const motionVal = useMotionValue(0);
-  const spring = useSpring(motionVal, { damping: 20, stiffness: 120 });
-  const displayVal = useTransform(spring, (v) => `${Math.round(v)}%`);
-  const [displayText, setDisplayText] = useState("0%");
-  const scaleX = useTransform(spring, [0, 100], [0, 1]);
 
+  // 2. "Движок" анимации счетчика и полоски
+  const motionVal = useMotionValue(0); // Текущее значение (от 0 до 100)
+  const spring = useSpring(motionVal, { damping: 20, stiffness: 120 }); // Пружина для плавности
+
+  // 3. Преобразования для визуальной части
+  const displayVal = useTransform(spring, (v) => `${Math.round(v)}%`); // Для текста с процентами
+  const scaleX = useTransform(spring, [0, 100], [0, 1]); // Для ширины полоски (от 0 до 1)
+
+  // Стейт для отображения текста
+  const [displayText, setDisplayText] = useState("0%");
+
+  // 4. Синхронизация "пружины" с текстом
   useEffect(() => {
     const unsub = displayVal.on("change", (v) => setDisplayText(v));
     return unsub;
   }, [displayVal]);
 
+  // 5. Обработчики мыши
   const handleMouseEnter = () => {
     setIsHovered(true);
-    motionVal.set(0);
-    setTimeout(() => motionVal.set(value), 50);
+    motionVal.set(0); // Сбрасываем в ноль
+    setTimeout(() => motionVal.set(value), 50); // Через 50мс запускаем заполнение
   };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-    motionVal.set(0);
+    motionVal.set(0); // Сбрасываем при уходе
   };
 
   return (
@@ -36,11 +45,12 @@ function SkillCard({ label, value }: SkillCardProps) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={styles.card}
-      whileHover={{ y: -4, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}>
+      whileHover={{ y: -4, scale: 1.02 }} // Легкий подъем при наведении
+      whileTap={{ scale: 0.98 }}>
       <div className={styles.content}>
         <p className={styles.name}>{label}</p>
+
+        {/* 6. Блок с полоской и процентами (появляется только при наведении) */}
         <motion.div
           initial={false}
           animate={{
@@ -68,10 +78,12 @@ export function Skills() {
         <SkillCard label='React' value={90} />
         <SkillCard label='TypeScript' value={80} />
         <SkillCard label='Three.js / WebGL / R3F' value={80} />
-        <SkillCard label='HTML / SCSS' value={95} />
+        <SkillCard label='HTML / CSS / JS' value={90} />
         <SkillCard label='3ds max / Corona Renderer' value={90} />
         <SkillCard label='Blender' value={60} />
         <SkillCard label='Unreal Engine 5' value={55} />
+        <SkillCard label='Photoshop' value={75} />
+        <SkillCard label='Английский язык' value={85} />
       </div>
     </>
   );

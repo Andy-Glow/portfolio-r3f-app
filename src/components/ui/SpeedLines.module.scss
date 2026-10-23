@@ -1,29 +1,33 @@
+/* --- ОСНОВНОЙ ОВЕРЛЕЙ ЭФФЕКТА --- */
 .speedOverlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 999;
-  pointer-events: none;
-  opacity: 0;
+  z-index: 999; // Поверх 3D-сцены, но под модальными окнами
+  pointer-events: none; // Важно: клики проходят сквозь эффект к интерфейсу
+  opacity: 0; // По умолчанию скрыт
   overflow: hidden;
-  transition: opacity 0.3s ease-out;
+  transition: opacity 0.3s ease-out; // Плавное исчезновение
 
+  /* Состояние при прыжке персонажа */
   &.active {
     opacity: 1;
-    transition: opacity 0.1s ease-in;
-    background: rgba(0, 0, 0, 0.4);
+    transition: opacity 0.1s ease-in; // Мгновенное появление
+    background: rgba(0, 0, 0, 0.4); // Легкое затемнение фона
   }
 }
 
+/* --- СЛОЙ С ЛИНИЯМИ --- */
 .linesLayer {
   position: absolute;
   top: -100%;
   left: -100%;
-  width: 300%;
+  width: 300%; // Большой размер, чтобы при вращении линии покрывали весь экран
   height: 300%;
 
+  /* Рисуем радиальные лучи с помощью повторяющегося конического градиента */
   background: repeating-conic-gradient(
     from 0deg,
     transparent 0deg 2deg,
@@ -32,30 +36,39 @@
     rgba(255, 255, 255, 0.3) 8deg 10deg
   );
 
-  filter: blur(2px);
+  filter: blur(2px); // Размытие самих линий для эффекта motion-blur
+
+  /* МАСКА: делает центр прозрачным, чтобы линии не перекрывали Аватара */
   mask-image: radial-gradient(circle at center, transparent 15%, black 35%);
   -webkit-mask-image: radial-gradient(circle at center, transparent 15%, black 35%);
 
+  /* Анимация вращения включается только когда оверлей активен */
   .active & {
     animation: speed-spin 0.4s linear infinite;
   }
 }
 
+/* --- АНИМАЦИЯ ВРАЩЕНИЯ --- */
 @keyframes speed-spin {
   0% {
     transform: rotate(0deg) scale(1);
   }
   50% {
-    transform: rotate(180deg) scale(1.1);
+    transform: rotate(180deg) scale(1.1); // Легкое пульсирование для объема
   }
   100% {
     transform: rotate(360deg) scale(1);
   }
 }
 
+/* ========================================= */
+/* --- АДАПТИВ ДЛЯ МОБИЛЬНЫХ --- */
+/* ========================================= */
 @media (max-width: 768px) {
   .linesLayer {
-    filter: none;
+    filter: none; // Отключаем блюр на телефонах (сильно грузит видеокарту)
+
+    /* Делаем линии чуть тоньше и прозрачнее, чтобы без блюра они не резали глаз */
     background: repeating-conic-gradient(
       from 0deg,
       transparent 0deg 3deg,

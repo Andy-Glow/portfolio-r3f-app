@@ -1,22 +1,25 @@
 @use "../../styles/variables" as *;
 @use "../../styles/mixins" as *;
 
+// Вертикальный контейнер для карточек
 .contactsWrapper {
   display: flex;
   flex-direction: column;
   gap: 16px;
   margin-top: 20px;
   max-width: 350px;
-  perspective: 1000px;
+  perspective: 1000px; // Задает глубину для объемного эффекта при движении
 }
 
+// Обертка карточки (может быть ссылкой или div)
 .magneticWrapper {
   display: block;
   width: 100%;
-  text-decoration: none;
+  text-decoration: none; // Убирает подчеркивание у ссылки Telegram
   outline: none;
 }
 
+// Сама стеклянная карточка
 .card {
   position: relative;
   display: flex;
@@ -33,7 +36,7 @@
     background-color 0.3s ease;
   overflow: hidden;
 
-  /* Включаем Container Queries, чтобы шрифт зависел от ширины карточки */
+  /* Включаем Container Queries: размеры шрифтов внутри будут зависеть от ширины самой карточки */
   container-type: inline-size;
 }
 
@@ -42,6 +45,7 @@
   background: rgba(25, 25, 30, 0.8);
 }
 
+// Квадратная плашка под иконку
 .iconWrapper {
   display: flex;
   justify-content: center;
@@ -51,9 +55,10 @@
   border-radius: 12px;
   background: rgba(59, 130, 246, 0.15);
   color: $color-primary;
-  flex-shrink: 0;
+  flex-shrink: 0; // Запрещает иконке сжиматься при нехватке места
 }
 
+// Кастомные цвета для иконок
 .telegram {
   background: rgba(36, 161, 222, 0.15);
   color: #24a1de;
@@ -63,14 +68,16 @@
   color: #ea4335;
 }
 
+// Контейнер для текста (лейбл и значение)
 .textWrapper {
   display: flex;
   flex-direction: column;
   gap: 4px;
   flex: 1;
-  min-width: 0; /* Позволяет контейнеру сжиматься */
+  min-width: 0; // Важно: без этого текст не сожмется и вылезет за границы карточки
 }
 
+// Мелкий серый лейбл (TELEGRAM, EMAIL)
 .label {
   color: $color-text-muted;
   font-size: 0.85rem;
@@ -79,26 +86,22 @@
   letter-spacing: 0.5px;
 }
 
+// Сам текст (почта или никнейм)
 .value {
   color: $color-text;
   font-weight: 600;
+  white-space: nowrap; // Запрещаем перенос на новую строку
 
-  /* ЗАПРЕЩАЕМ ПЕРЕНОС СТРОК */
-  white-space: nowrap;
-
-  /* 
-    МАГИЯ АДАПТИВНОГО ШРИФТА:
-    clamp(минимум, идеальный_размер, максимум)
-    5.5cqw означает 5.5% от ширины самой карточки.
-    На узких экранах шрифт уменьшится, на широких — вырастет до 1.1rem.
-  */
+  /* Clamp(мин, идеал, макс). 
+     5.5cqw означает 5.5% от ширины карточки. 
+     Шрифт уменьшается на узких экранах и растет на широких. */
   font-size: clamp(0.75rem, 5.5cqw, 1.1rem);
 
-  /* Если email окажется совсем гигантским, он плавно обрежется троеточием */
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; // Если текст слишком длинный, появится "..."
 }
 
+// Зеленая надпись при успешном копировании
 .copiedState {
   display: flex;
   align-items: center;
@@ -121,7 +124,7 @@
   }
 }
 
-/* --- АДАПТИВ ДЛЯ МОБИЛЬНЫХ --- */
+// --- АДАПТИВ ДЛЯ МОБИЛЬНЫХ ---
 @media (max-width: 768px) {
   .contactsWrapper {
     gap: 12px;

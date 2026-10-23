@@ -6,11 +6,11 @@ export const TRANSITION_DELAY = 150;
 // Ваши десктопные позиции
 export const AVATAR_POSITIONS: Record<string, { x: number; y: number }> = {
   typing: { x: 0.2, y: -1.7 },
-  jumping: { x: 0.6, y: -0.9 },
-  standing: { x: 0.6, y: -0.9 },
-  waving: { x: 0.6, y: -0.9 },
-  salute: { x: 0.6, y: -0.9 },
-  thumbs: { x: 0.6, y: -0.9 },
+  jumping: { x: 0.5, y: -0.9 },
+  standing: { x: 0.5, y: -0.9 },
+  waving: { x: 0.5, y: -0.9 },
+  salute: { x: 0.5, y: -0.9 },
+  thumbs: { x: 0.5, y: -0.9 },
 };
 
 // НОВЫЕ ПОЗИЦИИ ДЛЯ МОБИЛЬНЫХ (экран < 768px)

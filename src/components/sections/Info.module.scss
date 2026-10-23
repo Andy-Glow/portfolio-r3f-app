@@ -1,11 +1,12 @@
 @use "../../styles/variables" as *;
 @use "../../styles/mixins" as *;
 
+// Основная стеклянная карточка
 .infoCard {
   @include glass-effect;
 
+  // Делаем фон чуть темнее, чтобы текст читался на фоне светлой комнаты
   background: rgba(15, 15, 20, 0.75);
-
   padding: 30px 40px;
   border-radius: 24px;
   max-width: 500px;
@@ -14,38 +15,24 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, $color-primary, transparent);
-    opacity: 0.7;
-  }
 }
 
-/* ... (стили шрифтов для десктопа) ... */
 .infoCard :global(.main-title) {
   font-size: 2.8rem;
   margin-bottom: 5px;
-  background: linear-gradient(180deg, #fff 0%, #aaa 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: #e6e6e6e1;
 }
 
 .infoCard :global(.subtitle) {
   font-size: 1.1rem;
+  color: #cccccc;
 }
 
+// Стили для списка компетенций
 .roleList {
   margin: 0;
   padding-left: 20px;
-  color: $color-text-muted;
+  color: #cccccc;
   font-size: 1.1rem;
   line-height: 1.6;
 
@@ -55,26 +42,25 @@
 }
 
 .roleTitle {
-  color: $color-text;
+  color: #e6e6e6e1;
   font-weight: 500;
   margin-bottom: 4px;
 }
 
-/* --- АДАПТИВ ДЛЯ МОБИЛЬНЫХ (Карточка Info) --- */
+/* --- АДАПТИВ ДЛЯ МОБИЛЬНЫХ --- */
 @media (max-width: 768px) {
   .infoCard {
-    padding: 15px 20px;
-    gap: 8px;
-    /* Убрали max-width: 100%, теперь карточка слушает ширину родителя (350px) */
+    padding: 15px 20px; // Уменьшаем внутренние отступы
+    gap: 8px; // Уменьшаем расстояние между блоками
   }
 
   .infoCard :global(.main-title) {
-    font-size: 1.4rem;
+    font-size: 1.4rem; // Уменьшаем имя
   }
 
   .infoCard :global(.subtitle) {
     font-size: 0.85rem;
-    line-height: 1.3;
+    line-height: 1.3; // Уменьшаем межстрочный интервал
   }
 
   .roleList {

@@ -1,57 +1,66 @@
+// Общая обертка всего текстового слоя
 .wrapper {
   width: 100%;
-  color: #fff;
+  color: #fff; // Базовый цвет текста
 }
 
+// Контейнер каждой отдельной секции (Инфо, Навыки и т.д.)
 .sectionContainer {
-  height: 100vh;
-  position: relative;
+  height: 100vh; // Каждая секция занимает ровно один экран
+  position: relative; // Нужно для абсолютного позиционирования текста внутри
 }
 
+// Блок с текстом (карточка)
 .textBlock {
-  position: absolute;
-  top: 12vh;
-  left: 10%;
-  max-width: 40vw;
-  transform-origin: top left;
-  transition: zoom 0.3s ease;
+  position: absolute; // Позволяет "прибить" текст в нужное место
+  top: 12vh; // Отступ сверху (12% от высоты экрана)
+  left: 10%; // Отступ слева (10% от ширины экрана)
+  max-width: 40vw; // Важно: не дает тексту заехать на 3D-Аватара справа
+
+  transform-origin: top left; // При зуме блок сжимается к левому верхнему углу
+  transition: zoom 0.3s ease; // Плавность при изменении размера окна
 }
 
+// --- АДАПТИВ ПО ВЫСОТЕ (Ноутбуки) ---
+// Используем zoom вместо scale, чтобы блок реально занимал меньше места
 @media (max-height: 900px) {
   .textBlock {
-    zoom: 0.9;
+    zoom: 0.9; // Уменьшаем до 90%
   }
 }
 
 @media (max-height: 800px) {
   .textBlock {
-    zoom: 0.8;
+    zoom: 0.8; // Уменьшаем до 80%
   }
 }
 
 @media (max-height: 700px) {
   .textBlock {
-    zoom: 0.7;
+    zoom: 0.7; // Уменьшаем до 70%
   }
 }
 
+// --- АДАПТИВ ПО ШИРИНЕ (Мобильные) ---
 @media (max-width: 768px) {
   .textBlock {
-    left: 5%;
+    left: 5%; // Уменьшаем отступ слева
     right: auto;
-    width: 55vw;
+    width: 55vw; // Сужаем блок, чтобы он не перекрывал Аватара
     max-width: 320px;
-    zoom: 1;
-    top: 15vh;
+    zoom: 1; // Отключаем зум, на мобильных текст и так мелкий
+    top: 15vh; // Сдвигаем чуть ниже
   }
 
+  // Класс для самой первой карточки (Инфо)
   .mobileBottom {
-    top: auto;
-    bottom: 5vh;
+    top: auto; // Сбрасываем отступ сверху
+    bottom: 5vh; // Прижимаем к низу экрана (чтобы Аватар был виден сверху)
   }
 
+  // Класс для остальных карточек (Навыки, Проекты, Контакты)
   .mobileTop {
-    top: 100px !important;
+    top: 100px !important; // Жестко прижимаем к верху, чтобы текст был под меню навигации
     bottom: auto;
   }
 }
