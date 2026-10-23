@@ -1,12 +1,13 @@
 import React from "react";
 import * as THREE from "three";
-import { useGLTF, useTexture, useScroll } from "@react-three/drei";
+import { useGLTF, useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
+import { useScrollProgress } from "../ScrollProvider";
 
 export function Office(props: React.ComponentProps<"group">) {
   const { scene } = useGLTF("/models/scene.glb");
   const bakedTexture = useTexture("/textures/baked.jpg");
-  const scroll = useScroll();
+  const progressRef = useScrollProgress();
 
   bakedTexture.flipY = false;
   bakedTexture.colorSpace = THREE.SRGBColorSpace;
@@ -27,10 +28,10 @@ export function Office(props: React.ComponentProps<"group">) {
   const groupRef = React.useRef<THREE.Group>(null);
 
   useFrame(() => {
-    if (!scroll || !groupRef.current) return;
-    const firstScreenProgress = Math.min(scroll.offset / 0.25, 1);
+    if (!groupRef.current) return;
+    const progress = progressRef.current;
+    const firstScreenProgress = Math.min(progress / 0.25, 1);
 
-    // Ваши настройки офиса
     const targetY = THREE.MathUtils.lerp(-1.0, -5.0, firstScreenProgress);
     const targetX = THREE.MathUtils.lerp(0.2, 0.2, firstScreenProgress);
 

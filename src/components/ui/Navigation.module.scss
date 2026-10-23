@@ -25,17 +25,29 @@
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &:hover:not(:disabled) {
-    color: $color-text;
-    background: rgba(255, 255, 255, 0.1);
+  /* Убираем стандартную обводку при фокусе */
+  outline: none;
+  -webkit-tap-highlight-color: transparent; /* Убирает синюю вспышку при тапе на iOS/Android */
+
+  /* Эффект наведения ТОЛЬКО для ПК (где есть мышка) */
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      color: $color-text;
+      background: rgba(255, 255, 255, 0.1);
+    }
   }
 
-  /* --- СТИЛИ ДЛЯ НЕАКТИВНОЙ КНОПКИ --- */
+  /* Сбрасываем фон при нажатии (active) */
+  &:active {
+    background: transparent;
+  }
+
+  /* Стили для неактивной (активной в данный момент) кнопки */
   &:disabled {
-    color: $color-primary; /* Выделяем цветом бренда, показывая, где мы */
-    background: rgba(59, 130, 246, 0.15); /* Легкая подсветка фона */
-    cursor: default; /* Убираем курсор-руку */
-    opacity: 1; /* Оставляем полностью видимой */
+    color: $color-primary;
+    background: rgba(59, 130, 246, 0.15);
+    cursor: default;
+    opacity: 1;
   }
 }
 

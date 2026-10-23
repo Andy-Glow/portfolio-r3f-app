@@ -6,21 +6,17 @@ body,
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #000; /* Темный фон на случай, если картинка не загрузилась */
+  /* Убираем background-color: #101010; */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .app-container {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   position: relative;
-  overflow: hidden;
 }
 
-/* ... остальной сброс стилей ... */
-
+/* Скрываем скроллбар для красоты */
 ::-webkit-scrollbar {
   display: none;
   width: 0;
@@ -32,23 +28,37 @@ body,
   -ms-overflow-style: none;
 }
 
-/* --- Общая типографика (используется во всех секциях) --- */
+/* Настройки для нативного снап-скролла */
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+/* Общие стили текста (ваш код) */
 .main-title {
   font-size: 3.5rem;
   margin: 0 0 10px 0;
   font-weight: bold;
   color: $color-text;
 }
-
 .section-title {
   font-size: 2.5rem;
   margin: 0 0 20px 0;
   color: $color-text;
 }
-
 .subtitle {
   color: $color-text-muted;
   font-size: 1.2rem;
   margin: 0;
   line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+  .main-title {
+    font-size: 2.2rem;
+  }
 }

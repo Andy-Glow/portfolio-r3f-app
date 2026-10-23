@@ -1,7 +1,7 @@
 export const JUMP_TIME_SCALE = 1.5;
 export const SALUTE_TIME_SCALE = 0.8;
 export const CROSSFADE_TIME = 0.4;
-export const TRANSITION_DELAY = 300;
+export const TRANSITION_DELAY = 150;
 
 // Ваши десктопные позиции
 export const AVATAR_POSITIONS: Record<string, { x: number; y: number }> = {

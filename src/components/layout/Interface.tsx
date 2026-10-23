@@ -9,13 +9,13 @@ import { Contacts } from "../sections/Contacts";
 
 function Section({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={styles.sectionContainer}>
+    <div className={`${styles.sectionContainer} ${className || ""}`} data-lenis-snap>
       <motion.div
         initial={{ opacity: 0, y: 40, filter: "blur(12px)" }}
         whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         viewport={{ once: false, amount: 0.2 }}
-        className={`${styles.textBlock} ${className || ""}`}>
+        className={styles.textBlock}>
         {children}
       </motion.div>
     </div>

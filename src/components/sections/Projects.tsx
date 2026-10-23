@@ -1,34 +1,29 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
+import { useLenis } from "lenis/react";
 import styles from "./Projects.module.scss";
 import { PROJECTS_DATA, type Project } from "../../constants/projects";
 
-// --- КОМПОНЕНТ КАРУСЕЛИ ---
 function ImageCarousel({ images }: { images: string[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const handlePrev = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
-
   const handleNext = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
-
   return (
     <div className={styles.carousel}>
       <img src={images[currentIndex]} alt={`Фото ${currentIndex + 1}`} />
-
       <button className={`${styles.carouselBtn} ${styles.prev}`} onClick={handlePrev}>
         &#8249;
       </button>
       <button className={`${styles.carouselBtn} ${styles.next}`} onClick={handleNext}>
         &#8250;
       </button>
-
       <div className={styles.carouselDots}>
         {images.map((_, i) => (
           <span key={i} className={`${styles.dot} ${i === currentIndex ? styles.activeDot : ""}`} />
@@ -40,14 +35,12 @@ function ImageCarousel({ images }: { images: string[] }) {
 
 function ProjectCard({ project, onClick }: { project: Project; onClick: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-
   const handleMouseEnter = () => {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => {});
     }
   };
-
   const handleMouseLeave = () => {
     if (videoRef.current) videoRef.current.pause();
   };
@@ -87,6 +80,21 @@ function ProjectCard({ project, onClick }: { project: Project; onClick: () => vo
 
 export function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const lenis = useLenis();
+
+  useEffect(() => {
+    if (selectedProject) {
+      lenis?.stop();
+      document.body.style.overflow = "hidden";
+    } else {
+      lenis?.start();
+      document.body.style.overflow = "";
+    }
+    return () => {
+      lenis?.start();
+      document.body.style.overflow = "";
+    };
+  }, [selectedProject, lenis]);
 
   return (
     <>
@@ -100,7 +108,6 @@ export function Projects() {
           />
         ))}
       </div>
-
       {createPortal(
         <AnimatePresence>
           {selectedProject && (
@@ -128,7 +135,6 @@ export function Projects() {
                     </span>
                   ))}
                 </div>
-
                 <div className={styles.modalMedia}>
                   {selectedProject.images ? (
                     <ImageCarousel images={selectedProject.images} />
@@ -136,9 +142,7 @@ export function Projects() {
                     <img src={selectedProject.imageUrl} alt={selectedProject.title} />
                   )}
                 </div>
-
                 <p className={styles.modalDescription}>{selectedProject.description}</p>
-
                 {selectedProject.hasInteractiveDemo && (
                   <div className={styles.modalWarning}>
                     <p className={styles.warningText}>
@@ -148,7 +152,6 @@ export function Projects() {
                     </p>
                   </div>
                 )}
-
                 <div className={styles.modalLinks}>
                   {selectedProject.githubUrl && (
                     <a

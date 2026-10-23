@@ -1,6 +1,5 @@
 import React from "react";
 import * as THREE from "three";
-import { useScroll } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
   CROSSFADE_TIME,
@@ -9,28 +8,36 @@ import {
   SALUTE_TIME_SCALE,
   TRANSITION_DELAY,
 } from "../constants/avatar";
+import { useScrollProgress } from "../components/ScrollProvider";
 
 export function useAvatarAnimation(
   actions: Record<string, THREE.AnimationAction>,
   mixer: THREE.AnimationMixer,
 ) {
-  const scroll = useScroll();
+  const progressRef = useScrollProgress();
   const [currentAnim, setCurrentAnim] = React.useState<string>("typing");
   const currentAnimRef = React.useRef("typing");
   const transitionTimeout = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const isFirstRender = React.useRef(true);
 
+  // Следим за изменением прогресса между кадрами
+  const lastProgress = React.useRef(0);
+
   useFrame(() => {
-    if (!scroll) return;
+    const progress = progressRef.current;
 
     if (isFirstRender.current) {
-      if (scroll.offset > 0) isFirstRender.current = false;
+      if (progress > 0.05) isFirstRender.current = false;
+      lastProgress.current = progress;
       return;
     }
 
-    const exactPage = scroll.offset * (scroll.pages - 1);
+    // Проверяем, движется ли скролл прямо сейчас
+    const isMoving = Math.abs(progress - lastProgress.current) > 0.0005;
+    lastProgress.current = progress;
+
+    const exactPage = progress * 3;
     const currentPage = Math.round(exactPage);
-    const isMoving = Math.abs(exactPage - currentPage) > 0.01;
 
     if (isMoving) {
       if (transitionTimeout.current) {
@@ -43,6 +50,7 @@ export function useAvatarAnimation(
         setCurrentAnim("jumping");
       }
     } else {
+      // Если скролл остановился, плавно переходим в нужную анимацию
       if (currentAnimRef.current === "jumping" && !transitionTimeout.current) {
         transitionTimeout.current = setTimeout(() => {
           const targetAnim = PAGE_ANIMATIONS[currentPage] || "standing";
@@ -92,7 +100,6 @@ export function useAvatarAnimation(
     }
     if (!nextAction) return;
 
-    // --- ОТПРАВЛЯЕМ СОБЫТИЯ ДЛЯ ЭФФЕКТА СКОРОСТИ ---
     if (actualAnim === "jumping") {
       window.dispatchEvent(new Event("avatar-jump-start"));
     } else {

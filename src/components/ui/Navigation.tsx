@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLenis } from "lenis/react";
 import styles from "./Navigation.module.scss";
 
 const NAV_ITEMS = [
@@ -9,18 +10,21 @@ const NAV_ITEMS = [
 ];
 
 export function Navigation() {
+  const lenis = useLenis();
   const [activePage, setActivePage] = useState(0);
 
   useEffect(() => {
-    const handlePageChange = (e: Event) => {
-      setActivePage((e as CustomEvent).detail);
+    if (!lenis) return;
+    const handleScroll = ({ progress }: { progress: number }) => {
+      const currentPage = Math.round(progress * 3);
+      setActivePage(currentPage);
     };
-    window.addEventListener("page-changed", handlePageChange);
-    return () => window.removeEventListener("page-changed", handlePageChange);
-  }, []);
+    lenis.on("scroll", handleScroll);
+    return () => lenis.off("scroll", handleScroll);
+  }, [lenis]);
 
   const handleClick = (page: number) => {
-    if (page === activePage) return;
+    if (page === activePage || !lenis) return;
     window.dispatchEvent(new CustomEvent("nav-jump-to", { detail: page }));
   };
 

@@ -13,16 +13,36 @@
   top: 12vh;
   left: 10%;
   max-width: 40vw;
+  transform-origin: top left;
+  transition: zoom 0.3s ease;
 }
 
-/* --- АДАПТИВ ДЛЯ МОБИЛЬНЫХ (Интерфейс) --- */
+@media (max-height: 900px) {
+  .textBlock {
+    zoom: 0.9;
+  }
+}
+
+@media (max-height: 800px) {
+  .textBlock {
+    zoom: 0.8;
+  }
+}
+
+@media (max-height: 700px) {
+  .textBlock {
+    zoom: 0.7;
+  }
+}
+
 @media (max-width: 768px) {
   .textBlock {
     left: 5%;
     right: auto;
-    /* СУЖАЕМ БЛОК: было 90vw, стало 65vw */
     width: 55vw;
     max-width: 320px;
+    zoom: 1;
+    top: 15vh;
   }
 
   .mobileBottom {
@@ -31,7 +51,7 @@
   }
 
   .mobileTop {
-    top: 8vh;
+    top: 100px !important;
     bottom: auto;
   }
 }
