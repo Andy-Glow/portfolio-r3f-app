@@ -1,32 +1,32 @@
-# React + TypeScript + Vite
+# Interactive 3D Portfolio (React + Three.js)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Персональный сайт-портфолио, представляющий собой интерактивную 3D-сцену с персонажем. Проект объединяет современный веб-дизайн, сложную 3D-анимацию и кастомную логику плавного скролла.
 
-Currently, two official plugins are available:
+**[Ссылка на живое демо проекта](https://andy-glow.github.io/portfolio-r3f-app/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Ключевые особенности
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Интерактивная 3D-сцена**: Офис, аватар и космические объекты, отрендеренные с помощью React Three Fiber.
+- **Синхронизация анимаций и скролла**: При перелистывании секций персонаж «прыгает», а фоновая комната улетает, создавая эффект перемещения в пространстве.
+- **Кастомный плавный скролл**: Использование библиотеки Lenis с жестким «прилипанием» (Snap) к секциям для создания эффекта слайдов.
+- **Стиль "Жидкое стекло" (Glassmorphism)**: Полупрозрачные карточки с размытием фона и микро-анимациями при наведении.
+- **Анимации персонажа (Mixamo)**: Смена поз (печать, прыжок, приветствие, честь и др.) с плавным кроссфейдом.
+- **Кастомный лоадер**: Красивый экран загрузки с прогресс-баром, который скрывается только после подгрузки всех 3D-ассетов.
+- **Модальные окна проектов**: Вызов через React Portal, блокировка скролла на фоне и встроенная карусель изображений.
+- **Адаптивность**: Кастомная логика для мобильных устройств (управление свайпами и адаптация 3D-камеры).
 
-## Expanding the Oxlint configuration
+---
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## Стек технологий
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+- **Core**: React 19, TypeScript
+- **3D & WebGL**: Three.js, `@react-three/fiber`, `@react-three/drei`
+- **Анимации**: Motion (Framer Motion), Three.js Animation Mixer
+- **Скролл**: Lenis
+- **Стилизация**: SCSS Modules, CSS Variables
+- **Сборка**: Vite
+- **Деплой**: GitHub Actions (GitHub Pages)
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+---

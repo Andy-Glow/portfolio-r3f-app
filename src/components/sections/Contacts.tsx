@@ -91,8 +91,7 @@ export function Contacts() {
       <p>Вы можете написать мне в телеграм или на электронную почту</p>
 
       <div className={styles.contactsWrapper}>
-        {/* Карточка Telegram (ссылка) */}
-        <MagneticCard href='https://t.me/andy_b_glow' target='_blank'>
+        <MagneticCard href='tg://resolve?domain=andy_b_glow' target='_blank'>
           <div className={`${styles.iconWrapper} ${styles.telegram}`}>
             <TelegramIcon />
           </div>
@@ -101,8 +100,6 @@ export function Contacts() {
             <span className={styles.value}>@andy_b_glow</span>
           </div>
         </MagneticCard>
-
-        {/* Карточка Email (с копированием) */}
         <MagneticCard onClick={handleCopyEmail}>
           <div className={`${styles.iconWrapper} ${styles.email}`}>
             {/* Условный рендеринг иконки */}

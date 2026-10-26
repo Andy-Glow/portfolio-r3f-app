@@ -7,6 +7,7 @@ import { SpeedLines } from "./components/ui/SpeedLines";
 import { Interface } from "./components/layout/Interface";
 import { useStepScroll } from "./hooks/useStepScroll";
 import { ScrollProvider } from "./providers/ScrollProvider";
+import { Loader } from "./components/ui/Loader";
 
 function Scene() {
   useStepScroll();
@@ -42,6 +43,7 @@ function App() {
       <main className='app-container' style={{ background: "transparent" }}>
         <SpeedLines />
         <Navigation />
+        <Loader />
 
         {/* СЛОЙ 0: Фиксированная 3D-сцена */}
         <div
