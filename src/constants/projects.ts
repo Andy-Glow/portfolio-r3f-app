@@ -18,13 +18,13 @@ export const PROJECTS_DATA: Project[] = [
   {
     id: "p1",
     title: "3D-просмотрщик интерактивный",
-    tags: ["React", "TS", "Three.js", "R3F"],
+    tags: ["React", "TS", "Three.js", "Next.js"],
     description:
-      "Разработка интерактивной витрины для бренда велосипедов. Пользователь может вращать 3D-модель, менять её цвет и текстуры. (ПРОЕКТ В РАЗРАБОТКЕ!)",
-    imageUrl: `${BASE}pics/under-development.png`,
+      "Разработка интерактивной витрины для бренда велосипедов. Пользователь может вращать 3D-модель, менять её цвет и текстуры.",
+    imageUrl: `${BASE}pics/bicycles.jpg`,
     videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-    githubUrl: "https://github.com/Andy-Glow",
-    liveUrl: "https://andy-glow.github.io/react-car-threefiber-app/",
+    githubUrl: "https://github.com/Andy-Glow/bike-configurator-app",
+    liveUrl: "https://andy-glow.github.io/bike-configurator-app/",
     hasInteractiveDemo: true,
   },
   {
